@@ -27,86 +27,48 @@ namespace DoAN_k4.Controllers
         }
 
 
-        /*[HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
-        {
-            var acc = await _dbContext.users.Find(u => u.Email == email).FirstOrDefaultAsync();
-            if (acc != null)
-            {
-                bool checkPass = BCrypt.Net.BCrypt.Verify(password, acc.Password);
-                ViewBag.emailDb = acc.Email;
-                ViewBag.inputEmail = email;
-                ViewBag.CheckEmail = acc.Email == email;
-                ViewBag.Test = acc.Email != email && !checkPass;
-
-                if (acc.Email != email && !checkPass )
-                {
-                    ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ!";
-                    return View();
-                }
-
-                var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, acc.Email) }, "DoAnKy4");
-                var pricipal = new ClaimsPrincipal(identity);
-                HttpContext.SignInAsync("DoAnKy4", pricipal);
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-            
-
-            return RedirectToAction("Index", "Home");
-        }*/
-
-
-        /*[HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
-        {
-            var acc = await _dbContext.users.Find(u => u.Email == email).FirstOrDefaultAsync();
-            if (acc != null)
-            {
-                bool checkPass = BCrypt.Net.BCrypt.Verify(password, acc.Password);
-
-                if (acc.Email != email && !checkPass && acc.IsAdmin == false)
-                {
-                    ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ!";
-                    return View();
-                }
-
-                var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, acc.Email) }, "DoAnKy4Security");
-                var pricipal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync("DoAnKy4Security", pricipal);
-                return RedirectToAction("Index", "Home");
-            }
-
-
-            return RedirectToAction("Index", "Home");
-        }*/
-
 
         [HttpPost]
-        [ActionName("Login")]
         public async Task<IActionResult> Login(string email, string password)
         {
-
-            var user = await _dbContext.users.Find(u => u.Email == email).FirstOrDefaultAsync();
-
-            if (user != null && BCrypt.Net.BCrypt.Verify(password,user.Password))
+            var acc = await _dbContext.users.Find(u => u.Email == email).FirstOrDefaultAsync();
+            if (acc != null)
             {
-                var claims = new List<Claim>
+                bool checkPass = BCrypt.Net.BCrypt.Verify(password, acc.Password);
+
+                if (checkPass != false && acc.IsAdmin == true)
                 {
-                    new Claim(ClaimTypes.Name, user.Email),
-                };
-
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync("DoAnKy4Security", principal);
-                return RedirectToAction("Index","Home");
+                    var identity = new ClaimsIdentity(new[] { 
+                        new Claim(ClaimTypes.Name, acc.Email),
+                        new Claim("UserId", acc.Id), 
+                        new Claim("FullName", acc.FirstName + " "+ acc.LastName),
+                    }, "DoAnKy4Security");
+                    var pricipal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync("DoAnKy4Security", pricipal);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Thông tin đăng nhập không hợp lệ!";
+                    return View("Index");
+                }
+                
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View();
+                TempData["ErrorMessage"] = "Thông tin đăng nhập không hợp lệ!";
+                return View("Index");
+
             }
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("DoAnKy4Security");
+
+            return RedirectToAction("Index", "Home");
+        }
+
 
 
         public IActionResult Test()

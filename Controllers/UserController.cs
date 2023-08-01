@@ -12,7 +12,7 @@ using X.PagedList;
 
 namespace DoAN_k4.Controllers
 {
-    /*[Authorize]*/
+    [Authorize]
     public class UserController : Controller
     {
         private readonly ApplicationDBContext _dbContext;

@@ -84,6 +84,22 @@
     <script src="~/asstes/js/template.js"></script>
     <script src="~/asstes/js/settings.js"></script>
     <script src="~/asstes/js/todolist.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Check if there's an error message in TempData
+        var errorMessage = '@TempData["ErrorMessage"]';
+        if (errorMessage) {
+            // Show the Swal error message
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: errorMessage,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    </script>
+    
     <!-- endinject -->
 </body>
 
