@@ -1,6 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace DoAN_k4.Models
 {
@@ -14,11 +17,16 @@ namespace DoAN_k4.Models
         [BsonElement("userId")]
         public string UserId { get; set; }
 
+        [BsonElement("userName")]
+        public string UserName { get; set; }
+
         [BsonElement("post")]
-        public string PostContent { get; set; }
+        public string Post { get; set; }
 
         [BsonElement("postImg")]
-        public string[] PostImages { get; set; }
+        public string[] PostImg { get; set; }
+        [BsonElement("userImg")]
+        public string UserImg { get; set; }
 
         [BsonElement("likes")]
         public string[] Likes { get; set; }
@@ -36,14 +44,17 @@ namespace DoAN_k4.Models
         [BsonElement("updatedAt")]
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime UpdatedAt { get; set; }
+        [JsonProperty("liked")]
+        public Boolean Liked { get; set; }
+
+        [BsonElement("postTime")]
+        public string PostTime { get; set; }
 
     }
-
-
     public class Comment
     {
         [BsonElement("userId")]
-        public ObjectId UserId { get; set; }
+        public string UserId { get; set; }
 
         [BsonElement("userName")]
         public string UserName { get; set; }
@@ -55,9 +66,16 @@ namespace DoAN_k4.Models
         public string Content { get; set; }
 
         [BsonElement("cmtDate")]
+        [BsonRepresentation(BsonType.DateTime)]
         public DateTime CmtDate { get; set; }
 
         [BsonElement("_id")]
         public ObjectId CommentId { get; set; }
     }
+    public class CommentRequestModel
+    {
+        public string UserId { get; set; }
+        public string Content { get; set; }
+    }
+
 }
