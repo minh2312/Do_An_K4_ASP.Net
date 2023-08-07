@@ -1,6 +1,7 @@
 ﻿using DoAN_k4.Data;
 using DoAN_k4.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using Newtonsoft.Json;
@@ -154,7 +155,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
             {
                 using (var httpClient = new HttpClient())
                 {
-                   //  loginUser Id
+                    //  loginUser Id
                     var userId = "64bb92776f471d50889347df";
 
                     var data = new { userId, content };
@@ -178,6 +179,80 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePost(string post, IFormFile image)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    //  loginUser Id
+                    var userId = "64bb92776f471d50889347df";
+                    // Kiểm tra xem có ảnh được upload hay không
+                    string imageUrl = "";
+                    if (image != null)
+                    {
+                        // Gửi ảnh lên API để upload
+                        var formData = new MultipartFormDataContent();
+                        formData.Add(new StreamContent(image.OpenReadStream()), "image", image.FileName);
+
+                        var uploadResponse = await httpClient.PostAsync(urlConnectApi + "upload", formData);
+                        if (!uploadResponse.IsSuccessStatusCode)
+                        {
+                            return BadRequest("Failed to upload image.");
+                        }
+
+                        var uploadResult = await uploadResponse.Content.ReadAsStringAsync();
+                        var filename = JsonConvert.DeserializeObject<dynamic>(uploadResult).filename;
+                        imageUrl = "http://10.0.2.2:3000/public/uploads/" + filename;
+                    }
+
+                    // Gửi thông tin bài viết lên API để tạo bài viết
+                    var postData = new
+                    {
+                        userId,
+                        post,
+                        postImg = imageUrl
+                    };
+
+                    var json = JsonConvert.SerializeObject(postData);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var postResponse = await httpClient.PostAsync(urlConnectApi + "posts", content);
+                    if (!postResponse.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Failed to create post.");
+                    }
+
+                    var postResult = await postResponse.Content.ReadAsStringAsync();
+                    var response = JsonConvert.DeserializeObject<dynamic>(postResult);
+
+                    return Json(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Failed to create post: " + ex.Message });
+            }
+        }
+        [HttpPost]
+        public async Task<bool> DeletePost(string postId)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.DeleteAsync(urlConnectApi + "posts/"+postId);
+                    response.EnsureSuccessStatusCode();
+                    return true;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                return false;
             }
         }
 

@@ -6,7 +6,7 @@
 @using DoAN_k4.Helpers
 
 <div class="col-xl-7 col-xxl-8 col-lg-7">
-    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3" id="@Model.Id">
         <div class="card-body p-0 d-flex">
             <figure class="avatar me-3">
                 @if (!string.IsNullOrEmpty(Model.UserImg))
@@ -26,17 +26,17 @@
                     @DateHelper.FormatTimeDifference(Model.PostTime)
                 </span>
             </h4>
-            <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
-            <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
-                <div class="card-body p-0 d-flex">
-                    <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
-                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+            @if (Model.UserId == "64bb92776f471d50889347df")
+            {
+                <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+                <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
+                    <div class="card-body p-0 d-flex mt-2">
+                        <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
+                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost('@Model.Id')">Delete Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                    </div>
                 </div>
-                <div class="card-body p-0 d-flex mt-2">
-                    <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-            </div>
+            }
+
         </div>
         <div>
             <div class="card-body p-0 me-lg-5">
@@ -56,7 +56,7 @@
                             var replacedImageUrl = imageUrl.Replace("http://10.0.2.2:3000", "http://localhost:3000");
                             <div class="row ps-2 pe-2">
                                 <div class="col-xs-12 col-sm-12 p-1">
-                                    <a href="@replacedImageUrl" data-lightbox="roadtrip">
+                                    <a href="@replacedImageUrl" data-lightbox="">
                                         <img src="@replacedImageUrl" class="rounded-3 w-100" alt="image">
                                     </a>
                                 </div>
@@ -268,5 +268,25 @@
                 });
             });
         });
+
+        function deletePost(postId) {
+            if (!confirm("Are you sure you want to delete this post?")) {
+                return;
+            }
+            console.log(postId);
+            $.ajax({
+                type: "POST",
+                url: `/SocialUser/Home/DeletePost`,
+                data: { postId },
+                success: function (response) {
+                    console.log(response);
+                    // Xoá bài viết khỏi giao diện
+                    $(`#${postId}`).remove();
+                },
+                error: function () {
+                    // Xử lý khi có lỗi trong quá trình xoá bài viết
+                }
+            });
+        }
     </script>
 }

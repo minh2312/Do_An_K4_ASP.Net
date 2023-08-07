@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "Detail Page";
+    Layout = "~/Areas/SocialUser/Views/Shared/_LayoutUser.cshtml";
+}
+<style>
+    .avatar-upload {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+        /* Hide the default file input */
+        .avatar-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+    /* Style for the custom label */
+    .avatar-label {
+        cursor: pointer;
+    }
+
+    /* Style for the avatar image */
+    .middle-sidebar-left .avatar img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<div class="middle-sidebar-left">
+    <div class="">
+        <div class="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
+            <div class="card-body p-lg-5 p-4 w-100 border-0 ">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 text-center">
+                        <div class="avatar-upload">
+                            <input type="file" id="avatarInput" accept="image/*">
+                            <label for="avatarInput" class="avatar-label">
+                                @if (!string.IsNullOrEmpty(Model.UserImg))
+                                {
+                                    var userIG = Model.UserImg.Replace("http://10.0.2.2:3000", "http://localhost:3000");
+                                    <figure class="avatar ms-auto me-auto mb-0 mt-2 w100">
+                                        <img id="previewImage" src="@userIG" alt="image" class="shadow-sm rounded-3 w-100">
+                                    </figure>
+                                }
+                                else
+                                {
+                                    <figure class="avatar ms-auto me-auto mb-0 mt-2 w100">
+                                        <img id="previewImage" src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png" class="shadow-sm rounded-3 w-100">
+                                    </figure>
+                                }
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="post">
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <div class="form-group">
+                                <label class="mont-font fw-600 font-xsss">First Name</label>
+                                <input type="text" class="form-control" value="@Model.FName" id="fname" name="fname">
+                            </div>
+                        </div>
+                        <input name="id" type="hidden" value="@Model._id"/>
+                        <input name="img" type="hidden" value="@Model.UserImg"/>
+                        <div class="col-lg-6 mb-3">
+                            <div class="form-group">
+                                <label class="mont-font fw-600 font-xsss">Last Name</label>
+                                <input type="text" class="form-control" value="@Model.LName" id="lName" name="lname">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <div class="form-group">
+                                <label class="mont-font fw-600 font-xsss" id="email">Email</label>
+                                <input type="text" class="form-control" value="@Model.Email" disabled name="email">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-3">
+                            <div class="form-group">
+                                <label class="mont-font fw-600 font-xsss" id="phone">Phone</label>
+                                <input type="text" class="form-control" value="@Model.Phone" name="phone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 mb-3">
+                            <label class="mont-font fw-600 font-xsss">About</label>
+                            <textarea class="form-control mb-0 p-3 h100 bg-greylight lh-16" rows="5" spellcheck="false" id="about" name="about">@Model.About</textarea>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <button type="submit" id="updateUserBtn" class="bg-current text-center text-white font-xsss fw-600 p-3 w175 rounded-3 d-inline-block">Save</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <!-- <div class="card w-100 border-0 p-2"></div> -->
+    </div>
+</div>
+
+<script>
+   
+</script>
+@section Scripts {
+    <script>
+         $('#avatarInput').change(function () {
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var imageUrl = e.target.result;
+            $('#previewImage').attr('src', imageUrl);
+        };
+
+        // Đọc và hiển thị ảnh
+        reader.readAsDataURL(file);
+         });
+
+
+        $('#post').submit(function (e) {
+    e.preventDefault();
+            var id = $('input[name="id"]').val();
+
+    var fname = $('input[name="fname"]').val();
+    var lname = $('input[name="lname"]').val();
+    var phone = $('input[name="phone"]').val();
+    var email = $('input[name="email"]').val();
+    var img = $('input[name="img"]').val();
+    var about = $('textarea[name="about"]').val();
+            var avatar = $('#avatarInput').prop('files')[0];
+
+    var formData = new FormData();
+    formData.append("fName", fname);
+    formData.append("lName", lname);
+    formData.append("phone", phone);
+    formData.append("email", email);
+    formData.append("about", about);
+            formData.append("id", id);
+            formData.append("img", img);
+
+    if (avatarInput) {
+        formData.append("avatar", avatar);
+            }
+            console.log(formData);
+    $.ajax({
+        type: "POST",
+        url: "/SocialUser/Account/Update",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response.postId);
+        },
+        error: function () {
+            // Xử lý khi có lỗi trong quá trình đăng bài
+        }
+    });
+});
+
+    </script>
+}

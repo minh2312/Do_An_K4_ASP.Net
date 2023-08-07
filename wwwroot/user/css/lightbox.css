@@ -2,49 +2,6 @@ body.lb-disable-scrolling {
   overflow: hidden;
 }
 
-.lightboxOverlay {
-  position: fixed;
-  overflow: hidden;
-  
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  background-color: black;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-  opacity: 0.8;
-  display: none;
-  height: 100vh !important;
-
-}
-
-.lightbox {
-  position: absolute;
-  left: 0;
-  width: calc(100% - 320px);
-  z-index: 10000;
-  text-align: center;
-  line-height: 0;
-  font-weight: normal;
-  outline: none;
-}
-body.right-comment-none .lightbox {width: 100% !important;}
-body.right-comment-none .right-comment {display: none;}
-
-.lightbox .lb-image {
-  display: block;
-  height: auto;
-  max-width: inherit;
-  max-height: none;
-  border-radius: 3px;
-
-  /* Image border */
-  /*border: 4px solid white;*/
-}
-
-.lightbox a img {
-  border: none;
-}
-
 .lb-outerContainer {
   position: relative;
   *zoom: 1;
@@ -218,6 +175,5 @@ body.right-comment-none .right-comment {display: none;}
   .lightbox .lb-image,.lb-outerContainer {width: 100% !important; }
   .lb-dataContainer  {position: absolute; top:0; z-index: 10;}
   .right-comment {top:auto !important; width: 100% !important; padding-bottom: 30px; height: 70% !important;}
-  .lightboxOverlay {background-color: #fff; opacity: 1 !important;}
   .lb-data .lb-number {color: #fff;}
 }
