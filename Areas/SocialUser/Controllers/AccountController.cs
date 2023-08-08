@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace DoAN_k4.Areas.SocialUser.Controllers
 {
     [Area("SocialUser")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public string urlConnectApi = "http://localhost:3000/";
         public async Task<IActionResult> Index(string userId)
@@ -28,7 +28,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 try
                 {
                     // id của user đang log in 
-                    var loggedInUserId = "64bb92776f471d50889347df";
+                    var loggedInUserId = HttpContext.Session.GetString("UserLogin");
                     var dataPost = new { userId, loggedInUserId };
                     var jsonPost = JsonConvert.SerializeObject(dataPost);
                     var contentPost = new StringContent(jsonPost, Encoding.UTF8, "application/json");
@@ -68,7 +68,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var loggedInUserId = "64bb92776f471d50889347df"; // loginUser Id
+                    var loggedInUserId = HttpContext.Session.GetString("UserLogin");
                     var response = await httpClient.PostAsync(urlConnectApi + "users/" + id + "/follow?loggedInUserId=" + loggedInUserId, null);
 
                     if (response.IsSuccessStatusCode)
@@ -101,7 +101,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 try
                 {
                     // id của user đang log in 
-                    var loggedInUserId = "64bb92776f471d50889347df";
+                    var loggedInUserId = HttpContext.Session.GetString("UserLogin");
 
                     var response = await httpClient.GetAsync(urlConnectApi + "users/" + userId + "?loggedInUserId=" + loggedInUserId);
                     if (response.IsSuccessStatusCode)
