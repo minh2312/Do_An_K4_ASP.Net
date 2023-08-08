@@ -35,3 +35,15 @@ C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor
 C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Views\User\Detail.cshtml.g.cs
 C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Views\Account\Index.cshtml.g.cs
 C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Views\Account\Test.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Account\Index.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Home\GetPostDetail.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Home\Index.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Shared\_FooterUser.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Shared\_HeaderUser.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Shared\_LayoutUser.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Shared\_NavbarUser.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\Shared\_RightChat.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\_ViewImports.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\_ViewStart.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\User\Index.cshtml.g.cs
+C:\Users\Admin\New folder (2)\DoAn\DoAN_k4\DoAN_k4\obj\Debug\netcoreapp2.1\Razor\Areas\SocialUser\Views\User\Test.cshtml.g.cs

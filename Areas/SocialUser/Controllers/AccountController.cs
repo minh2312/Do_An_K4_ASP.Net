@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace DoAN_k4.Areas.SocialUser.Controllers
 {
-    [Area("SocialUser")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public string urlConnectApi = "http://localhost:3000/";
         public async Task<IActionResult> Index(string userId)
@@ -88,5 +87,6 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 return StatusCode(500, new { error = "Failed to follow/unfollow user: " + ex.Message });
             }
         }
+
     }
 }

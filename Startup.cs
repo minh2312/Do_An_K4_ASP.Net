@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
 
 namespace DoAN_k4
 {
@@ -48,7 +49,13 @@ namespace DoAN_k4
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<ApplicationDBContext>();
-
+            services.AddSession(ops =>
+            {
+                ops.IdleTimeout = TimeSpan.FromHours(12);
+                ops.Cookie.Name = "AccSession";
+                ops.Cookie.HttpOnly = true;
+            });
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 
@@ -70,7 +77,7 @@ namespace DoAN_k4
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -82,7 +89,7 @@ namespace DoAN_k4
             {
                 routes.MapRoute(
                   name: "areas",
-                  template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                  template: "{area:exists}/{controller=User}/{action=Index}/{id?}"
                 );
             });
 
