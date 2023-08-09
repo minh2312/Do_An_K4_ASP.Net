@@ -21,7 +21,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
             if (string.IsNullOrEmpty(userId))
             {
                 // loginUser
-                userId = "64bb92776f471d50889347df";
+                 userId = HttpContext.Session.GetString("UserLogin");
             }
             using (var httpClient = new HttpClient())
             {
@@ -94,7 +94,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
             if (string.IsNullOrEmpty(userId))
             {
                 // loginUser
-                userId = "64bb92776f471d50889347df";
+                 userId = HttpContext.Session.GetString("UserLogin");
             }
             using (var httpClient = new HttpClient())
             {

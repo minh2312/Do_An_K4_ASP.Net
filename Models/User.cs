@@ -69,7 +69,7 @@ namespace DoAN_k4.Models
         public string FName { get; set; }
         /*[BsonElement("userImg")]*/
         public string UserImg { get; set; }
-        /*public string _id { get; set; }*/
+        //public string _id { get; set; }
     }
     public class Follower
     {
