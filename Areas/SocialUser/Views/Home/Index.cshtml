@@ -1,8 +1,13 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Areas/SocialUser/Views/Shared/_LayoutUser.cshtml";
-
+    var userId = @HttpContextAccessor.HttpContext.Session.GetString("UserLogin");
+    var Image = @HttpContextAccessor.HttpContext.Session.GetString("Image");
 }
+
 <style>
     input[type="file"] {
         display: none;
@@ -13,7 +18,17 @@
         <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
 
             <div class="card-body p-0 mt-3 position-relative">
-                <figure class="avatar position-absolute ms-2 mt-1 top-5"><img src="~/user/images/user-8.png" alt="image" class="shadow-sm rounded-circle w30"></figure>
+                <figure class="avatar position-absolute ms-2 mt-1 top-5">
+                    @if (!string.IsNullOrEmpty(Image))
+                    {
+                        var userIG = Image.Replace("http://10.0.2.2:3000", "http://localhost:3000");
+                        <img src="@userIG" alt="image" class="shadow-sm rounded-circle w30">
+                    }
+                    else
+                    {
+                        <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png" alt="image" class="shadow-sm rounded-circle w30">
+                    }
+                </figure>
                 <textarea name="content" class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" cols="30" rows="10" placeholder="What's on your mind?"></textarea>
                 <img id="previewImage" style="max-width:140px;" />
             </div>

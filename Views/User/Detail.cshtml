@@ -38,13 +38,13 @@
             background-color: transparent; /* Set the thumb (handle) color to transparent */
         }
 
-.profile-banner{
-  height:40%;
-  width:100%;
-  /*background-image:url('https://picsum.photos/seed/picsum/1000/520');*/
-  background-size:100%;
-  border-radius:10px;
-}
+    .profile-banner {
+        height: 15%;
+        width: 100%;
+        /*background-image:url('https://vapa.vn/wp-content/uploads/2022/12/anh-nen-mau-trang-001.jpg');*/
+        background-size: 100%;
+        border-radius: 10px;
+    }
 
 .profile-picture{
   height:150px;
@@ -54,7 +54,6 @@
   position:relative;
   top:-90px;
   text-align:center;
-  border:10px solid #fff;
 }
 
 .profile-picture span{
@@ -330,21 +329,22 @@
 
 
     <div class="profile-banner">
-        @if (@ViewBag.User.CoverPicture == "")
-        {
-            <img src="https://picsum.photos/seed/picsum/1000/520" alt="Profile Banner" style="width: 100%; height: 100%; border-radius: 10px;">
-        }
-        else
-        {
-            <img src="@ViewBag.User.CoverPicture" alt="Profile Banner" style="width: 100%; height: 100%; border-radius: 10px;">
-        }
+            <img src="https://vapa.vn/wp-content/uploads/2022/12/anh-nen-mau-trang-001.jpg" alt="Profile Banner" style="width: 100%; height: 100%; border-radius: 10px;">
     </div>
     <div class="profile-picture">
 
-        <a href=""><img src=" @ViewBag.User.UserImage"></a>
+        @if (!string.IsNullOrEmpty(ViewBag.User.UserImage))
+        {
+            var userIG = ViewBag.User.UserImage.Replace("http://10.0.2.2:3000", "http://localhost:3000");
+            <img src="@userIG" alt="image">
+        }
+        else
+        {
+            <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png">
+        }
         <span>@ViewBag.User.FirstName @ViewBag.User.LastName</span>
         <br>
-       @* <small>(Jack Daniel)</small>*@
+        @* <small>(Jack Daniel)</small>*@
     </div>
 
     <div class="profile-content">

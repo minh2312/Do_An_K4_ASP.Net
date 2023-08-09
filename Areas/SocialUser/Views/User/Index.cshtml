@@ -9,9 +9,20 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
+    <link rel="stylesheet" href="~/user/css/themify-icons.css">
+    <link rel="stylesheet" href="/user/css/feather.css">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="~/user/css/style.css">
+
 
     <style>
+        .login-card {
+            min-width: 450px;
+            max-width: 588px;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -75,49 +86,57 @@
                 text-decoration: none;
             }
     </style>
+
 </head>
 
-<body>
-    <div class="container">
-  <div class="card">
-    <h2>Login Form</h2>
-            <form method="post" action="/SocialUser/User/Login">
-      <label for="username">Email</label>
-      <input type="text" id="email" name="email" placeholder="Enter your username">
+<body class="color-theme-blue">
 
-      <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password">
+    <div class="main-wrap">
+        <div class="row">
+            <div class="col-xl-5 d-none d-xl-block p-0 vh-100 bg-image-cover bg-no-repeat" style="background-image: url(/user/images/login-bg.jpg);"></div>
+            <div class="col-xl-7 vh-100 align-items-center d-flex bg-white rounded-3 overflow-hidden">
+                <div class="container">
 
-      <button type="submit">Login</button>
-    </form>
-    <div class="switch">Don't have an account? <a href="#" onclick="switchCard()">Register here</a></div>
-  </div>
+                    <div class="card shadow-none border-0 ms-auto me-auto login-card">
+                        <h2>Login </h2>
+                        <form method="post" action="/SocialUser/User/Login">
+                            <label for="username">Email</label>
+                            <input type="text" id="email" name="email" placeholder="Enter your username">
 
-        <div class="card" style="display: none;">
-            <h2>Register Form</h2>
-            <form method="post" action="/SocialUser/User/RegisterUser">
-                <label for="fullname">First Name</label>
-                <input type="text" id="firstName" name="fname" placeholder="Enter your first name" required>
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password">
 
-                <label for="fullname">Last Name</label>
-                <input type="text" id="lastName" name="lname" placeholder="Enter your last name" required>
+                            <button type="submit">Login</button>
+                        </form>
+                        <div class="switch">Don't have an account? <a href="#" onclick="switchCard()">Register here</a></div>
+                    </div>
 
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <div class="card shadow-none border-0 ms-auto me-auto login-card" style="display: none;">
+                        <h2>Register</h2>
+                        <form method="post" action="/SocialUser/User/RegisterUser">
+                            <label for="fullname">First Name</label>
+                            <input type="text" id="firstName" name="fname" placeholder="Enter your first name" required>
 
-                <label for="email">Phone</label>
-                <input type="text" id="phone" name="phone" placeholder="Enter your phone" required>
+                            <label for="fullname">Last Name</label>
+                            <input type="text" id="lastName" name="lname" placeholder="Enter your last name" required>
 
-                <label for="new-password">New Password</label>
-                <input type="password" id="new-password" name="password" placeholder="Enter your new password" required>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-                <button type="submit">Register</button>
-            </form>
-            <div class="switch">Already have an account? <a href="#" onclick="switchCard()">Login here</a></div>
+                            <label for="email">Phone</label>
+                            <input type="text" id="phone" name="phone" placeholder="Enter your phone" required>
+
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" name="password" placeholder="Enter your new password" required>
+
+                            <button type="submit">Register</button>
+                        </form>
+                        <div class="switch">Already have an account? <a href="#" onclick="switchCard()">Login here</a></div>
+                    </div>
+                </div>
+            </div>
         </div>
-</div>
-
-
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

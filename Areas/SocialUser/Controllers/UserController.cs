@@ -40,6 +40,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 {
                     HttpContext.Session.SetString("UserLogin", acc.Id);
                     HttpContext.Session.SetString("Email", acc.Email);
+                    HttpContext.Session.SetString("Image", acc.UserImage);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -85,6 +86,12 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
         public async Task<IActionResult> Test()
         {
             return View();
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("DoAnKy4Security");
+
+            return RedirectToAction("Index", "User");
         }
     }
 }
