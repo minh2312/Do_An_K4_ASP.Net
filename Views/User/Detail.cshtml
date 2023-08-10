@@ -178,13 +178,14 @@
 }
 
 .content-md-left img{
-  height:85px;
+  height:50px;
   border-radius:50%;
 }
 
 .content-md-middle{
   width:85%;
-  height:500px;
+  /*height:500px;*/
+  height:auto;
   padding-top:20px;
 }
 
@@ -215,7 +216,7 @@
   padding-left:10px;
   transition:0.5s;
   text-decoration:none;
-  margin-top:-20px;
+  
 }
 
 .post-title-time a{
@@ -230,9 +231,11 @@
 
 .post-desc{
   width:100%;
-  height:385px;
+  /*height:385px;*/
+  height:auto;
   padding-left:10px;
   padding-top:10px;
+  padding:25px;
 }
 
 .post-desc img{
@@ -376,34 +379,34 @@
                     </div>
 
                     <div class="post-desc">
-                            @post.PostContent
+                            @post.Post
                         <br>
-                            @if (post.PostImages != null && post.PostImages.Length > 0)
+                            @if (post.PostImg != null && post.PostImg.Length > 0)
                             {
-                                @if (post.PostImages.Length == 1)
+                                @if (post.PostImg.Length == 1)
                                 {
                                     <div class="post-images">
-                                        @foreach (var image in post.PostImages)
+                                        @foreach (var image in post.PostImg)
                                         {
 
                                             <a href=""><img src="@image" alt="Post Image" width="450" height="300" /></a>
                                         }
                                     </div>
                                 }
-                                else if (post.PostImages.Length == 2)
+                                else if (post.PostImg.Length == 2)
                                 {
                                     <div class="post-images">
-                                        @foreach (var image in post.PostImages)
+                                        @foreach (var image in post.PostImg)
                                         {
 
                                             <a href=""><img src="@image" alt="Post Image" width="225" height="300" /></a>
                                         }
                                     </div>
                                 }
-                                else if (post.PostImages.Length == 3)
+                                else if (post.PostImg.Length == 3)
                                 {
                                     <div class="post-images">
-                                        @foreach (var image in post.PostImages)
+                                        @foreach (var image in post.PostImg)
                                         {
 
                                             <a href=""><img src="@image" alt="Post Image" width="150" height="300" /></a>
@@ -411,17 +414,17 @@
                                     </div>
                                 }
 
-                                @if (post.PostImages.Length > 3)
+                                @if (post.PostImg.Length > 3)
                                 {
                                     <div class="remaining-images">
                                         <div class="post-images">
                                             @for (int i = 0; i < 3; i++) // Display only the first three images
                                             {
-                                                var image = post.PostImages[i];
+                                                var image = post.PostImg[i];
                                                 <a href=""><img src="@image" alt="Post Image" width="150" height="300" /></a>
                                             }
                                         </div>
-                                        <a href="">+@((post.PostImages.Length - 3)) ảnh</a>
+                                        <a href="">+@((post.PostImg.Length - 3)) ảnh</a>
                                     </div>
                                 }
 
