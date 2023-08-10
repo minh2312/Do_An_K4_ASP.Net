@@ -1,0 +1,183 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/user/css/themify-icons.css">
+    <link rel="stylesheet" href="/user/css/feather.css">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="~/user/css/style.css">
+
+
+    <style>
+        .login-card {
+            min-width: 450px;
+            max-width: 588px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .switch {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+            .switch a {
+                color: #007BFF;
+                text-decoration: none;
+            }
+    </style>
+
+</head>
+
+<body class="color-theme-blue">
+
+    <div class="main-wrap">
+        <div class="row">
+            <div class="col-xl-5 d-none d-xl-block p-0 vh-100 bg-image-cover bg-no-repeat" style="background-image: url(/user/images/login-bg.jpg);"></div>
+            <div class="col-xl-7 vh-100 align-items-center d-flex bg-white rounded-3 overflow-hidden">
+                <div class="container">
+
+                    <div class="card shadow-none border-0 ms-auto me-auto login-card">
+                        <h2>Login </h2>
+                        <form method="post" action="/SocialUser/User/Login">
+                            <label for="username">Email</label>
+                            <input type="text" id="email" name="email" placeholder="Enter your username">
+
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password">
+
+                            <button type="submit">Login</button>
+                        </form>
+                        <div class="switch">Don't have an account? <a href="#" onclick="switchCard()">Register here</a></div>
+                    </div>
+
+                    <div class="card shadow-none border-0 ms-auto me-auto login-card" style="display: none;">
+                        <h2>Register</h2>
+                        <form method="post" action="/SocialUser/User/RegisterUser">
+                            <label for="fullname">First Name</label>
+                            <input type="text" id="firstName" name="fname" placeholder="Enter your first name" required>
+
+                            <label for="fullname">Last Name</label>
+                            <input type="text" id="lastName" name="lname" placeholder="Enter your last name" required>
+
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                            <label for="email">Phone</label>
+                            <input type="text" id="phone" name="phone" placeholder="Enter your phone" required>
+
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" name="password" placeholder="Enter your new password" required>
+
+                            <button type="submit">Register</button>
+                        </form>
+                        <div class="switch">Already have an account? <a href="#" onclick="switchCard()">Login here</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function switchCard() {
+            const loginCard = document.querySelector('.container .card:nth-child(1)');
+            const registerCard = document.querySelector('.container .card:nth-child(2)');
+
+            if (loginCard.style.display === 'none') {
+                loginCard.style.display = 'block';
+                registerCard.style.display = 'none';
+            } else {
+                loginCard.style.display = 'none';
+                registerCard.style.display = 'block';
+            }
+        }
+
+        var succesMessage = '@TempData["SuccessMessage"]'
+        if (succesMessage) {
+            // Show the Swal error message
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: succesMessage,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+
+        // Check if there's an error message in TempData
+        var errorMessage = '@TempData["ErrorMessage"]';
+        if (errorMessage) {
+            // Show the Swal error message
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: errorMessage,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    </script>
+</body>
+
+</html>

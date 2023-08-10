@@ -61,15 +61,15 @@ namespace DoAN_k4.Models
         [BsonIgnore]
         public int __v { get; set; }
 
-        [BsonElement("followed")]
+        /*[BsonElement("followed")]*/
         public bool followed { get; set; }
-        [BsonElement("lname")]
+        /*[BsonElement("lname")]*/
         public string LName { get; set; }
-        [BsonElement("fname")]
+        /*[BsonElement("fname")]*/
         public string FName { get; set; }
-        [BsonElement("userImg")]
+        /*[BsonElement("userImg")]*/
         public string UserImg { get; set; }
-        public string _id { get; set; }
+        //public string _id { get; set; }
     }
     public class Follower
     {

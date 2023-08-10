@@ -1,6 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
     ViewData["Title"] = "Account Page";
     Layout = "~/Areas/SocialUser/Views/Shared/_LayoutUser.cshtml";
+    var userId = @HttpContextAccessor.HttpContext.Session.GetString("UserLogin");
 }
 
 <div class="middle-sidebar-bottom">
@@ -27,7 +31,7 @@
                         }
                         <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">@Model.FName @Model.LName<span class="fw-500 font-xssss text-grey-500 mt-1 mb-3 d-block">@Model.Email</span></h4>
                         <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
-                            @if (Model._id != "64bb92776f471d50889347df")
+                            @if (Model.Id != userId)
                             {
                                 @if (Model.followed)
                                 {
@@ -40,7 +44,7 @@
                             }
                             else
                             {
-                                <a asp-area="SocialUser" asp-controller="Account" asp-action="Detail" asp-route-userId="@Model._id" class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3" id="buttonEdit">Edit Profile</a>
+                                <a asp-area="SocialUser" asp-controller="Account" asp-action="Detail" asp-route-userId="@Model.Id" class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3" id="buttonEdit">Edit Profile</a>
                             }
 
                         </div>
@@ -318,7 +322,7 @@
             $("#followButton").click(function () {
                 $.ajax({
                     type: "POST",
-                    url: "/SocialUser/Account/FollowUser/@Model._id",
+                    url: "/SocialUser/Account/FollowUser/@Model.Id",
                     success: function (response) {
                         console.log(response);
                         if (response.followed) {

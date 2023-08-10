@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace DoAN_k4.Areas.SocialUser.Controllers
 {
     [Area("SocialUser")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ApplicationDBContext _dbContext;
         public string urlConnectApi = "http://localhost:3000/";
@@ -31,7 +31,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
             {
                 try
                 {
-                    var userId = "64bb92776f471d50889347df"; // loginUser Id
+                    var userId = HttpContext.Session.GetString("UserLogin"); // loginUser Id
                     var data = new { userId };
                     var json = JsonConvert.SerializeObject(data);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -89,7 +89,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 try
                 {
                     // loginUser Id
-                    var userId = "64bb92776f471d50889347df";
+                    var userId = HttpContext.Session.GetString("UserLogin");
                     var data = new { userId };
                     var json = JsonConvert.SerializeObject(data);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -123,7 +123,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 try
                 {
                     //loginUser Id
-                    var userId = "64bb92776f471d50889347df";
+                    var userId = HttpContext.Session.GetString("UserLogin");
                     var data = new { userId };
                     var json = JsonConvert.SerializeObject(data);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -156,7 +156,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     //  loginUser Id
-                    var userId = "64bb92776f471d50889347df";
+                    var userId = HttpContext.Session.GetString("UserLogin");
 
                     var data = new { userId, content };
                     var json = JsonConvert.SerializeObject(data);
@@ -190,7 +190,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     //  loginUser Id
-                    var userId = "64bb92776f471d50889347df";
+                    var userId = HttpContext.Session.GetString("UserLogin");
                     // Kiểm tra xem có ảnh được upload hay không
                     string imageUrl = "";
                     if (image != null)

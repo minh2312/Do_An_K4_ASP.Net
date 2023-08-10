@@ -1,9 +1,11 @@
-﻿@{
+﻿@using DoAN_k4.Helpers
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Detail Page";
     Layout = "~/Areas/SocialUser/Views/Shared/_LayoutUser.cshtml";
-
+    var userId = @HttpContextAccessor.HttpContext.Session.GetString("UserLogin");
 }
-@using DoAN_k4.Helpers
 
 <div class="col-xl-7 col-xxl-8 col-lg-7">
     <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3" id="@Model.Id">
@@ -26,7 +28,7 @@
                     @DateHelper.FormatTimeDifference(Model.PostTime)
                 </span>
             </h4>
-            @if (Model.UserId == "64bb92776f471d50889347df")
+            @if (Model.UserId == userId)
             {
                 <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
                 <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
@@ -193,7 +195,7 @@
                     }
                 });
             });
-           
+
         });
         function replaceImageUrl(imageUrl) {
             return imageUrl.replace("http://10.0.2.2:3000", "http://localhost:3000");
@@ -251,11 +253,11 @@
                         commentHtml +=
                             '</figure>' +
                             '<div>' +
-                        '<h5 class="font-xssss mt-2">' + responseData.comment.userName + '</h5>' +
-                        '<div class="time">' + formatTimeDifference(responseData.comment.cmtDate) + '</div>' +
+                            '<h5 class="font-xssss mt-2">' + responseData.comment.userName + '</h5>' +
+                            '<div class="time">' + formatTimeDifference(responseData.comment.cmtDate) + '</div>' +
                             '</div>' +
                             '</div>' +
-                        '<div class="message-wrap shadow-none">' + responseData.comment.content + '</div>' +
+                            '<div class="message-wrap shadow-none">' + responseData.comment.content + '</div>' +
                             '</div>';
 
                         $(".messages-content").append(commentHtml);
