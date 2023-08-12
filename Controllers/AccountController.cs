@@ -42,6 +42,8 @@ namespace DoAN_k4.Controllers
                         new Claim(ClaimTypes.Name, acc.Email),
                         new Claim("UserId", acc.Id), 
                         new Claim("FullName", acc.FirstName + " "+ acc.LastName),
+                        new Claim("Email", acc.Email),
+                        new Claim("ImageUser", acc.UserImage),
                     }, "DoAnKy4Security");
                     var pricipal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync("DoAnKy4Security", pricipal);

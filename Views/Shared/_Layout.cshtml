@@ -21,6 +21,7 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
     <link rel="stylesheet" href="~/asstes/css/vertical-layout-light/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- endinject -->
     <link rel="shortcut icon" href="~/asstes/images/favicon.png" />
 </head>
@@ -56,7 +57,14 @@
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                            <img src="@TempData["Image"]" alt="profile" />
+                            
+                            @{
+                                var imageUser = User.FindFirst("ImageUser");
+                                if (imageUser != null)
+                                {
+                                    <img src="@imageUser.Value" alt="profile" />
+                                }
+                            }
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <a class="dropdown-item">
@@ -85,7 +93,7 @@
       <!-- partial -->
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
+@*        <ul class="nav">
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
@@ -95,12 +103,46 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="~/User/Index">Danh Sách Người Dùng</a></li>
-                @*<li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>*@
               </ul>
             </div>
           </li>
-        </ul>
+        </ul>*@
+
+
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="icon-layout menu-icon"></i>
+                            <span class="menu-title">Quản Lý Tài Khoản</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="~/User/Index">Danh Sách Người Dùng</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+                            <i class="icon-columns menu-icon"></i>
+                            <span class="menu-title">Quản Lý Bài Viết</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="form-elements">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="~/Post/Index">Danh Sách Bài Viết</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                   
+                </ul>
+
       </nav>
       <!-- partial -->
       <div class="main-panel">

@@ -54,6 +54,7 @@ namespace DoAN_k4.Models
     public class Comment
     {
         [BsonElement("userId")]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
 
         [BsonElement("userName")]

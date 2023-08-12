@@ -1,0 +1,537 @@
+﻿
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+
+<style>
+    [class*="entypo-"]:before {
+        font-family: 'entypo', sans-serif;
+    }
+
+    * {
+        font-family: "Open Sans condensed";
+    }
+
+    .profile {
+        height: 1200px;
+        width: 1000px;
+        margin: 0 auto;
+        border-radius: 10px;
+        overflow-y: auto;
+    }
+
+        .profile::-webkit-scrollbar {
+            width: 0.5em; /* Set a width for the scrollbar (adjust as needed) */
+        }
+
+        .profile::-webkit-scrollbar-track {
+            background-color: transparent; /* Set the track background color to transparent */
+        }
+
+        .profile::-webkit-scrollbar-thumb {
+            background-color: transparent; /* Set the thumb (handle) color to transparent */
+        }
+
+    .profile-banner {
+        height: 15%;
+        width: 100%;
+        /*background-image:url('https://vapa.vn/wp-content/uploads/2022/12/anh-nen-mau-trang-001.jpg');*/
+        background-size: 100%;
+        border-radius: 10px;
+    }
+
+    .profile-picture {
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+        margin: 0 auto;
+        position: relative;
+        top: -90px;
+        text-align: center;
+    }
+
+        .profile-picture span {
+            font-size: 20pt;
+        }
+
+        .profile-picture small {
+            font-size: 13pt;
+            color: #cacaca;
+        }
+
+        .profile-picture img {
+            border-radius: 50%;
+            height: 100%;
+            width: 100%;
+        }
+
+    .add-frnd {
+        width: 90px;
+        position: absolute;
+        left: -130px;
+        top: 100px;
+        background: #00A9FA;
+        padding: 5px;
+        border-radius: 10px;
+        font-size: 13pt;
+        text-decoration: none;
+        color: #fff;
+        transition: 0.5s;
+    }
+
+    .follow {
+        width: 70px;
+        position: absolute;
+        margin-left: 180px;
+        top: 100px;
+        background: #00A9FA;
+        padding: 5px;
+        border-radius: 10px;
+        font-size: 13pt;
+        text-decoration: none;
+        color: #fff;
+        transition: 0.5s;
+    }
+
+        .follow span {
+            font-size: 13pt;
+        }
+
+    .add-frnd span {
+        font-size: 13pt;
+    }
+
+    .follow:hover {
+        transition: 0.5s;
+        background: #0079FA;
+    }
+
+    .add-frnd:hover {
+        transition: 0.5s;
+        background: #0079FA;
+    }
+
+    .profile-content {
+        height: 60%;
+        width: 100%;
+    }
+
+        .profile-content div {
+            float: left;
+        }
+
+    .content-left {
+        height: 300px;
+        width: 25%;
+        border-radius: 10px;
+    }
+
+    .content-middle {
+        height: 300px;
+        width: 65%;
+    }
+
+    .content-right {
+        height: 300px;
+        width: 10%;
+    }
+
+    .content-left ul {
+        list-style: none;
+        padding: 0;
+        border: 1px solid #f8f8f8;
+        border-radius: 10px;
+    }
+
+        .content-left ul li {
+            padding: 15px;
+            /* margin-top:5px; */
+            border-bottom: 1px solid #f8f8f8;
+        }
+
+            .content-left ul li:hover {
+                transition: 0.5s;
+                background: #f8f8f8;
+            }
+
+            .content-left ul li a {
+                font-size: 14pt;
+                color: #cacaca;
+            }
+
+            .content-left ul li span {
+                font-size: 12pt;
+                margin-right: 5px;
+            }
+
+    .content-md-left {
+        width: 15%;
+        height: 100%;
+        padding-top: 20px;
+        text-align: center;
+    }
+
+        .content-md-left img {
+            height: 50px;
+            border-radius: 50%;
+        }
+
+    .content-md-middle {
+        width: 85%;
+        /*height: 500px;*/
+        height: auto;
+        padding-top: 20px;
+    }
+
+    .post-title-name {
+        height: 10%;
+        width: 100%;
+        line-height: 30px;
+        padding-left: 10px;
+    }
+
+        .post-title-name a {
+            text-decoration: none;
+            color: #000;
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+            .post-title-name a:hover {
+                transition: 0.5s;
+                text-decoration: underline;
+                color: #121212;
+            }
+
+    .post-title-time {
+        height: 5%;
+        width: 100%;
+        font-size: 10pt;
+        padding-left: 10px;
+        transition: 0.5s;
+        text-decoration: none;
+    }
+
+        .post-title-time a {
+            color: #cacaca;
+        }
+
+            .post-title-time a:hover {
+                transition: 0.5s;
+                text-decoration: underline;
+            }
+
+
+    .post-desc {
+        width: 100%;
+        /*height: 385px;*/
+        height:auto;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding:25px;
+    }
+
+        .post-desc img {
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .post-desc a:hover {
+            opacity: 0.8;
+            transition: 0.5s;
+        }
+
+    .post-info {
+        height: 10%;
+        width: 100%;
+        border-bottom: 1px solid #f8f8f8;
+        margin-top: -10px;
+    }
+
+        .post-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            .post-info ul li {
+                float: left;
+                margin-right: 5px;
+                border-right: 1px solid #f8f8f8;
+            }
+
+                .post-info ul li a {
+                    font-size: 12pt;
+                    text-decoration: none;
+                    color: #cacaca;
+                    /* border-right:1px solid #cacaca; */
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+
+    .like:hover {
+        transition: 0.5s;
+        color: #00A9FA;
+    }
+
+    .comment:hover {
+        transition: 0.5s;
+        color: #121212;
+    }
+
+    .share:hover {
+        transition: 0.5s;
+        color: #FAB35F;
+    }
+
+    .content-right ul {
+        padding: 0;
+        list-style: none;
+    }
+
+        .content-right ul li {
+            height: 50px;
+            width: 50px;
+            display: block;
+            background: #f8f8f8;
+            text-align: center;
+            line-height: 50px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+            .content-right ul li a {
+                text-decoration: none;
+                color: #00A9FA;
+            }
+
+            .content-right ul li:hover {
+                background: #ededed;
+            }
+
+    .post-title-icon {
+        float: right;
+        font-family: 'entypo', sans-serif;
+        font-size: 14pt;
+        color: #00A9FA;
+        margin-right: 5px;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .comments-list {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #f8f8f8;
+        border-radius: 10px;
+        background-color: #f5f5f5;
+    }
+
+    /* Style for individual comments in the list */
+   /* .comment {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #f8f8f8;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }*/
+
+    /* Style for commenter's name */
+    .comment-name {
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Style for comment text */
+    .comment-text {
+        margin-top: 5px;
+        color: #555;
+    }
+
+    .comment-avatar {
+        width: 40px; /* Adjust the size as needed */
+        height: 40px; /* Adjust the size as needed */
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        float: left; /* Float the avatar to the left */
+    }
+
+        .comment-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    /* Style for the comment content */
+    .comment-content {
+        overflow: hidden; /* Clear the float */
+    }
+
+    /* Style for the comment details (name and text) */
+    .comment-details {
+        margin-left: 15px; /* Adjust as needed */
+    }
+</style>
+
+<div class="profile-content">
+    <div class="content-middle" style="margin:0 0 0 235px;">
+            <div style="background:white;border-radius:15px;margin:20px 0 30px 0;">
+                <div class="content-md-left">
+                @if (!string.IsNullOrEmpty(ViewBag.User.UserImage))
+                {
+                    var userIG = ViewBag.User.UserImage.Replace("http://10.0.2.2:3000", "http://localhost:3000");
+                    <img src="@userIG">
+                }
+                else
+                {
+                    <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png" class="float-right rounded-circle w-75">
+                }
+                </div>
+                <div class="dropdown">
+                </div>
+                <div class="content-md-middle">
+
+                    <div class="post-title-name">
+                        <span style="cursor:pointer" class="post-title-icon entypo-user dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <span class="dropdown-item" data-IdPost="@Model.Id" id="Cancel_Post">Hủy Bài Viết</span>
+                        </div>
+                    <a href="">@ViewBag.User.FirstName @ViewBag.User.LastName </a><br>
+                    </div>
+
+                    <div class="post-title-time">
+                    <a href="">@ViewBag.User.UpdatedAt.ToString("dd-MM-yyyy HH:mm")</a>
+                    </div>
+
+                    <div class="post-desc">
+                        @Model.Post
+                        <br>
+                    @if (@Model.PostImg != null && @Model.PostImg.Length > 0)
+                    {
+                        @if (@Model.PostImg.Length == 1)
+                        {
+                            <div class="post-images">
+                                @foreach (var image in @Model.PostImg)
+                                {
+
+                                    <a href=""><img src="@image" alt="Post Image" width="450" height="300" /></a>
+                                }
+                            </div>
+                        }
+                        else if (@Model.PostImg.Length == 2)
+                        {
+                            <div class="post-images">
+                                @foreach (var image in @Model.PostImg)
+                                {
+
+                                    <a href=""><img src="@image" alt="Post Image" width="225" height="300" /></a>
+                                }
+                            </div>
+                        }
+                        else if (@Model.PostImg.Length == 3)
+                        {
+                            <div class="post-images">
+                                @foreach (var image in @Model.PostImg)
+                                {
+
+                                    <a href=""><img src="@image" alt="Post Image" width="100" height="300" /></a>
+                                }
+                            </div>
+                        }
+                    }
+                    </div>
+                    <div class="post-info">
+                        <ul>
+                        <li><a href="" class="like"><span class="entypo-thumbs-up"></span>@Model.Likes.Length Like</a></li>
+                        <li><a href="" class="comment" data-toggle="modal" data-target="#exampleModalLong"><span class="entypo-comment"></span>@Model.Comments.Length Comment</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+  
+
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="font-weight:700; font-size:18px">Bài Viết Của @ViewBag.User.LastName</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        @foreach (var comment in Model.Comments)
+                            {
+                        <div class="comments-list">
+                            <!-- Example comment -->
+
+                                <div class="comment">
+                                    <div class="comment-avatar">
+                                        <img src="@comment.UserAvatar" alt="User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-details">
+                                            <div class="comment-name">@comment.UserName</div>
+                                            <div class="comment-text">@comment.Content</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#Cancel_Post").click(function () {
+                var postId = $(this).data('idpost');
+                var resultCancel = confirm('Bạn có chắc chắn muốn xóa bài viết này?');
+                if (resultCancel == true) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Post/DeletePost',
+                        data: { postId: postId },
+                        success: function (result) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Hủy Bài Viết Thành Công',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            window.location.href = '/Post/Index'; // Replace with your desired URL
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error: ' + error);
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+}
