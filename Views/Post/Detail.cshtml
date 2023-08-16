@@ -227,15 +227,19 @@
     .post-desc {
         width: 100%;
         /*height: 385px;*/
-        height:auto;
+        height: auto;
         padding-left: 10px;
         padding-top: 10px;
-        padding:25px;
+        padding: 25px;
     }
 
-        .post-desc img {
+        .post-desc img, .post-desc video {
             margin-top: 20px;
             border-radius: 10px;
+            max-width: 100%;
+            resize: vertical;
+            max-height: 320px;
+            object-fit: contain;
         }
 
         .post-desc a:hover {
@@ -252,19 +256,20 @@
 
         .post-info ul {
             list-style: none;
-            padding: 0;
+            /*padding:0;*/
         }
 
             .post-info ul li {
                 float: left;
-                margin-right: 5px;
+                margin-right: 15px;
                 border-right: 1px solid #f8f8f8;
             }
+
 
                 .post-info ul li a {
                     font-size: 12pt;
                     text-decoration: none;
-                    color: #cacaca;
+                    color: #706e6e;
                     /* border-right:1px solid #cacaca; */
                     padding-left: 10px;
                     padding-right: 10px;
@@ -331,7 +336,7 @@
     }
 
     /* Style for individual comments in the list */
-   /* .comment {
+    /* .comment {
         margin-top: 10px;
         padding: 10px;
         background-color: #fff;
@@ -379,9 +384,9 @@
 </style>
 
 <div class="profile-content">
-    <div class="content-middle" style="margin:0 0 0 235px;">
-            <div style="background:white;border-radius:15px;margin:20px 0 30px 0;">
-                <div class="content-md-left">
+    <div class="content-middle" style="width:100%">
+        <div style="background:white;border-radius:15px;margin:20px 0 30px 0;">
+            <div class="content-md-left">
                 @if (!string.IsNullOrEmpty(ViewBag.User.UserImage))
                 {
                     var userIG = ViewBag.User.UserImage.Replace("http://10.0.2.2:3000", "http://localhost:3000");
@@ -391,71 +396,81 @@
                 {
                     <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png" class="float-right rounded-circle w-75">
                 }
-                </div>
-                <div class="dropdown">
-                </div>
-                <div class="content-md-middle">
+            </div>
+            <div class="dropdown">
+            </div>
+            <div class="content-md-middle">
 
-                    <div class="post-title-name">
-                        <span style="cursor:pointer" class="post-title-icon entypo-user dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</span>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <span class="dropdown-item" data-IdPost="@Model.Id" id="Cancel_Post">Hủy Bài Viết</span>
-                        </div>
+                <div class="post-title-name">
+                    <span style="cursor:pointer" class="post-title-icon entypo-user dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</span>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <span class="dropdown-item" data-IdPost="@Model.Id" id="Cancel_Post">Hủy Bài Viết</span>
+                    </div>
                     <a href="">@ViewBag.User.FirstName @ViewBag.User.LastName </a><br>
-                    </div>
+                </div>
 
-                    <div class="post-title-time">
+                <div class="post-title-time">
                     <a href="">@ViewBag.User.UpdatedAt.ToString("dd-MM-yyyy HH:mm")</a>
-                    </div>
+                </div>
 
-                    <div class="post-desc">
-                        @Model.Post
-                        <br>
-                    @if (@Model.PostImg != null && @Model.PostImg.Length > 0)
+                <div class="post-desc">
+                    @Model.Post
+                    <br>
+                    @if (Model.PostImg != null && Model.PostImg.Length > 0)
                     {
-                        @if (@Model.PostImg.Length == 1)
-                        {
-                            <div class="post-images">
-                                @foreach (var image in @Model.PostImg)
-                                {
+                        var firstImage = Model.PostImg[0]; // Get the first image
+                        var isImage = firstImage.EndsWith(".jpg") || firstImage.EndsWith(".jpeg") || firstImage.EndsWith(".png");
+                        var isVideo = firstImage.EndsWith(".mp4") || firstImage.EndsWith(".mov") || firstImage.EndsWith(".avi");
 
-                                    <a href=""><img src="@image" alt="Post Image" width="450" height="300" /></a>
-                                }
-                            </div>
-                        }
-                        else if (@Model.PostImg.Length == 2)
-                        {
-                            <div class="post-images">
-                                @foreach (var image in @Model.PostImg)
-                                {
+                        <div class="post-images">
+                            @if (isImage)
+                            {
+                                <a href=""><img src="@firstImage.Replace("http://10.0.2.2:3000", "http://localhost:3000")" alt="Post Image" /></a>
+                            }
+                            else if (isVideo)
+                            {
+                                <a href=""><video controls><source src="@firstImage.Replace("http://10.0.2.2:3000", "http://localhost:3000")" type="video/mp4">y</video></a>
+                            }
+                        </div>
 
-                                    <a href=""><img src="@image" alt="Post Image" width="225" height="300" /></a>
-                                }
-                            </div>
-                        }
-                        else if (@Model.PostImg.Length == 3)
+                        @if (Model.PostImg.Length > 1)
                         {
-                            <div class="post-images">
-                                @foreach (var image in @Model.PostImg)
-                                {
-
-                                    <a href=""><img src="@image" alt="Post Image" width="100" height="300" /></a>
-                                }
+                            <div class="remaining-images">
+                                <a href="">+@((Model.PostImg.Length - 1)) ảnh</a>
                             </div>
                         }
                     }
-                    </div>
-                    <div class="post-info">
-                        <ul>
+                </div>
+                <div class="post-info">
+                    <ul>
                         <li><a href="" class="like"><span class="entypo-thumbs-up"></span>@Model.Likes.Length Like</a></li>
                         <li><a href="" class="comment" data-toggle="modal" data-target="#exampleModalLong"><span class="entypo-comment"></span>@Model.Comments.Length Comment</a></li>
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <div class="comments-list"style="width:100%;">
+
+                            <div class="comment">
+                                <div class="comment-avatar" title="@comment.UserName">
+                                    <img src="@comment.UserAvatar.Replace("http://10.0.2.2:3000", "http://localhost:3000")" alt="@comment.UserName">
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-details">
+                                        <div class="comment-text" style="padding-left:20px;">@comment.Content</div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
+        </div>
     </div>
 
-  
+
 
 
 </div>
@@ -475,9 +490,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         @foreach (var comment in Model.Comments)
-                            {
-                        <div class="comments-list">
-                            <!-- Example comment -->
+                        {
+                            <div class="comments-list">
+                                <!-- Example comment -->
 
                                 <div class="comment">
                                     <div class="comment-avatar">
@@ -491,8 +506,8 @@
                                     </div>
                                 </div>
                             </div>
-                            }
-                       
+                        }
+
                     </div>
                 </div>
             </div>

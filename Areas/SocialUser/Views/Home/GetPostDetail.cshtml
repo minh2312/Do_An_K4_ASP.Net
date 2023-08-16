@@ -26,6 +26,7 @@
                 @Model.UserName
                 <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
                     @DateHelper.FormatTimeDifference(Model.PostTime)
+                    @*@Model.PostTime.ToString("dd-MM-yyyy HH:mm")*@
                 </span>
             </h4>
             @if (Model.UserId == userId)
@@ -34,7 +35,11 @@
                 <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
                     <div class="card-body p-0 d-flex mt-2">
                         <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost('@Model.Id')">Delete Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                        <a href="#">
+                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost('@Model.Id')">
+                                Delete Post
+                            </h4>
+                        </a>
                     </div>
                 </div>
             }
@@ -56,10 +61,33 @@
                         @if (!string.IsNullOrEmpty(imageUrl))
                         {
                             var replacedImageUrl = imageUrl.Replace("http://10.0.2.2:3000", "http://localhost:3000");
+                            var isImage = replacedImageUrl.EndsWith(".jpg") || replacedImageUrl.EndsWith(".jpeg") || replacedImageUrl.EndsWith(".png");
+                            var isVideo = replacedImageUrl.EndsWith(".mp4") || replacedImageUrl.EndsWith(".mov") || replacedImageUrl.EndsWith(".avi");
+
                             <div class="row ps-2 pe-2">
                                 <div class="col-xs-12 col-sm-12 p-1">
                                     <a href="@replacedImageUrl" data-lightbox="">
-                                        <img src="@replacedImageUrl" class="rounded-3 w-100" alt="image">
+                                        @if (isImage)
+                                        {
+                                            <img src="@replacedImageUrl" class="rounded-3 w-100" alt="image">
+                                        }
+                                        else if (isVideo)
+                                        {
+                                            <video controls class="rounded-3 w-100">
+                                                <source src="@replacedImageUrl" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        }
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row ps-2 pe-2">
+                                <div class="col-xs-12 col-sm-12 p-1">
+                                    <a href="" data-lightbox="">
+                                        <img src="https://bim.gov.vn/Upload/images/staffs/avatar-default.jpg" class="rounded-3 w-100" alt="image">
                                     </a>
                                 </div>
                             </div>
@@ -77,14 +105,14 @@
 
                 @if (Model.Liked)
                 {
-                    <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                    <a href="#" onclick="react(event, '@Model.Id')" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                         <i class="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" data-item-id="@Model.Id"></i>
                         <span class="likeCount" data-item-id="@Model.Id">@likeCount Like</span>
                     </a>
                 }
                 else
                 {
-                    <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                    <a  href="#" onclick="react(event, '@Model.Id')" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                         <i class="feather-heart me-2 btn-round-xs font-xss" data-item-id="@Model.Id"></i>
                         <span class="likeCount" data-item-id="@Model.Id">@likeCount Like</span>
                     </a>
@@ -93,7 +121,7 @@
             }
             else
             {
-                <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                <a  href="#" onclick="react(event, '@Model.Id')" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                     <i class="feather-heart me-2 btn-round-xs font-xss" data-item-id="@Model.Id"></i>
                     <span>0 Like</span>
                 </a>
@@ -103,14 +131,14 @@
                 int cmtCount = Model.Comments.Length;
                 <a href="#" class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
                     <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-                    <span>@cmtCount Comments</span>
+                    <span id="commentCountSpan">@cmtCount Comments</span>
                 </a>
             }
             else
             {
                 <a href="#" class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
                     <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-                    <span>0 Comment</span>
+                    <span id="commentCountSpan">0 Comment</span>
                 </a>
             }
         </div>
@@ -157,46 +185,46 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $(".feather-heart").click(function (e) {
-                e.preventDefault();
-                var btn = $(this);
-                var itemId = btn.data("item-id");
-                var likeCountElem = $(".likeCount[data-item-id='" + itemId + "']");
-
-                // Gửi yêu cầu Ajax
-                $.ajax({
-                    type: "post", // Hoặc POST tùy thuộc vào cách bạn cấu hình server
-                    url: "/SocialUser/home/UpdatePostLikes", // Thay đổi ControllerName thành tên controller của bạn
-                    data: { postId: itemId },
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response.liked);
-                        if (response.liked == true) {
-                            console.log("tcvf");
-                            $(".feather-heart[data-item-id='" + itemId + "']").addClass("bg-red-gradiant");
-                            $(".feather-heart[data-item-id='" + itemId + "']").addClass("text-white");
-
-                        } else if (response.liked == false) {
-                            // Nếu liked là false, cập nhật trạng thái liked
-                            console.log("shjs");
-                            $(".feather-heart[data-item-id='" + itemId + "']").removeClass("bg-red-gradiant");
-                            $(".feather-heart[data-item-id='" + itemId + "']").removeClass("text-white");
-                        } else {
-                            alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
-                        }
-
-                        // Cập nhật số lượng like (nếu có) - Lưu ý: Nếu API không trả về số lượng like, bạn phải cập nhật số lượng like một cách riêng biệt (nếu cần thiết)
-                        var currentLikeCount = parseInt(likeCountElem.text());
-                        var newLikeCount = response.liked ? currentLikeCount + 1 : currentLikeCount - 1;
-                        likeCountElem.text(newLikeCount + " Like");
-                    },
-                    error: function () {
-                        alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
-                    }
-                });
-            });
+            
 
         });
+        function react(event, itemId) {
+            event.preventDefault();
+            var btn = $(event.currentTarget);
+            var likeCountElem = $(".likeCount[data-item-id='" + itemId + "']");
+            console.log("item :" + itemId);
+            // Gửi yêu cầu Ajax
+            $.ajax({
+                type: "post", // Hoặc POST tùy thuộc vào cách bạn cấu hình server
+                url: "/SocialUser/home/UpdatePostLikes", // Thay đổi ControllerName thành tên controller của bạn
+                data: { postId: itemId },
+                dataType: "json",
+                success: function (response) {
+                    console.log(response.liked);
+                    if (response.liked == true) {
+                        console.log("tcvf");
+                        $(".feather-heart[data-item-id='" + itemId + "']").addClass("bg-red-gradiant");
+                        $(".feather-heart[data-item-id='" + itemId + "']").addClass("text-white");
+
+                    } else if (response.liked == false) {
+                        // Nếu liked là false, cập nhật trạng thái liked
+                        console.log("shjs");
+                        $(".feather-heart[data-item-id='" + itemId + "']").removeClass("bg-red-gradiant");
+                        $(".feather-heart[data-item-id='" + itemId + "']").removeClass("text-white");
+                    } else {
+                        alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
+                    }
+
+                    // Cập nhật số lượng like (nếu có) - Lưu ý: Nếu API không trả về số lượng like, bạn phải cập nhật số lượng like một cách riêng biệt (nếu cần thiết)
+                    var currentLikeCount = parseInt(likeCountElem.text());
+                    var newLikeCount = response.liked ? currentLikeCount + 1 : currentLikeCount - 1;
+                    likeCountElem.text(newLikeCount + " Like");
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
+                }
+            });
+        };
         function replaceImageUrl(imageUrl) {
             return imageUrl.replace("http://10.0.2.2:3000", "http://localhost:3000");
         }
@@ -260,7 +288,13 @@
                             '<div class="message-wrap shadow-none">' + responseData.comment.content + '</div>' +
                             '</div>';
 
-                        $(".messages-content").append(commentHtml);
+                        $(".messages-content").prepend(commentHtml);
+
+                        var currentCommentCount = parseInt($("#commentCountSpan").text());
+                        var newCommentCount = currentCommentCount + 1;
+
+                        // Update the displayed count
+                        $("#commentCountSpan").text(newCommentCount + " Comments");
 
                         $("#commentInput").val("");
                     },

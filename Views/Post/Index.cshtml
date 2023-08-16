@@ -14,22 +14,21 @@
         <div class="col-md-4">
             <form method="get">
                 <div class="form-group" style="display:flex">
-                    <input type="text" name="searchString" class="form-control" placeholder="Search users...">
+                    <input type="text" name="searchString" class="form-control" placeholder="Search post...">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
 
             </form>
         </div>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover table-responsive ">
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th>#</th>
                     <th>Post</th>
                     <th>Total Like</th>
                     <th>Totla Comment</th>
                     <th>Status</th>
                     <th>CreateAt</th>
-                    <th>UpdateAt</th>
                     <th>Option</th>
                 </tr>
             </thead>
@@ -39,7 +38,10 @@
                     var post = Model[i];
                     <tr>
                         <td>@(i + 1)</td>
-                        <td>@post.Post</td>
+                        <td width="180px" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis; " title="@post.Post">
+                           
+                            @(post.Post.Length>70 ? post.Post.Substring(0, 70) + "..." : post.Post)
+                        </td>
                         <td>@post.Likes.Length <i class="fa-regular fa-thumbs-up"></i></td> <!-- Display total likes -->
                         <td>@post.Comments.Length <i class="fa-regular fa-comments"></i></td>
                         @if (post.Status)
@@ -52,7 +54,6 @@
                         }
 
                         <td>@post.CreatedAt</td>
-                        <td>@post.UpdatedAt</td>
                         <td>
                             <a style="color:black" href="@Url.Action("Detail", "Post", new { idPost = post.Id })"> <i class="fa-solid fa-circle-info"></i></a> |
                             @if (post.Status)

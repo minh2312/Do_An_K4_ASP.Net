@@ -40,6 +40,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 {
                     HttpContext.Session.SetString("UserLogin", acc.Id);
                     HttpContext.Session.SetString("Email", acc.Email);
+                    HttpContext.Session.SetString("UserName", acc.FirstName + " "+acc.LastName);
                     HttpContext.Session.SetString("Image", acc.UserImage);
                     return RedirectToAction("Index", "Home");
                 }

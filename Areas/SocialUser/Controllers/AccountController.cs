@@ -135,7 +135,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                     {
                         // Gửi ảnh lên API để upload
                         var formData = new MultipartFormDataContent();
-                        formData.Add(new StreamContent(avatar.OpenReadStream()), "image", avatar.FileName);
+                        formData.Add(new StreamContent(avatar.OpenReadStream()), "media", avatar.FileName);
 
                         var uploadResponse = await httpClient.PostAsync(urlConnectApi + "upload", formData);
                         if (!uploadResponse.IsSuccessStatusCode)

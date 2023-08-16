@@ -6,6 +6,7 @@
     Layout = "~/Areas/SocialUser/Views/Shared/_LayoutUser.cshtml";
     var userId = @HttpContextAccessor.HttpContext.Session.GetString("UserLogin");
     var Image = @HttpContextAccessor.HttpContext.Session.GetString("Image");
+    var UserName = @HttpContextAccessor.HttpContext.Session.GetString("UserName");
 }
 
 <style>
@@ -30,7 +31,12 @@
                     }
                 </figure>
                 <textarea name="content" class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" cols="30" rows="10" placeholder="What's on your mind?"></textarea>
-                <img id="previewImage" style="max-width:140px;" />
+                <img id="previewImage" src="" alt="Preview Image" style="display: none; max-width: 100%; max-height: 300px;">
+                <video id="previewVideo" controls style="display: none; max-width: 100%; max-height: 300px;">
+                    <source src="" type="video/mp4">
+                </video>
+                <input type="file" id="fileInput">
+
             </div>
             <div class="d-flex">
                 <div class="card-body d-flex p-0 mt-0">
@@ -151,13 +157,15 @@
 
                         </span>
                     </h4>
-                    @if (item.UserId == "64bb92776f471d50889347df")
+                    @if (item.UserId == userId)
                     {
                         <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
                         <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
                             <div class="card-body p-0 d-flex mt-2">
                                 <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost('@item.Id')"><a>Delete Post</a> <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost('@item.Id')">
+                                    <a href="#">Delete Post</a>
+                                </h4>
                             </div>
                         </div>
                     }
@@ -178,10 +186,23 @@
                                 @if (!string.IsNullOrEmpty(imageUrl))
                                 {
                                     var replacedImageUrl = imageUrl.Replace("http://10.0.2.2:3000", "http://localhost:3000");
+                                    var isImage = replacedImageUrl.EndsWith(".jpg") || replacedImageUrl.EndsWith(".jpeg") || replacedImageUrl.EndsWith(".png");
+                                    var isVideo = replacedImageUrl.EndsWith(".mp4") || replacedImageUrl.EndsWith(".mov") || replacedImageUrl.EndsWith(".avi");
+
                                     <div class="row ps-2 pe-2">
                                         <div class="col-xs-12 col-sm-12 p-1">
-                                            <a href="@replacedImageUrl" data-lightbox="">
-                                                <img src="@replacedImageUrl" class="rounded-3 w-100" alt="image">
+                                            <a asp-area="SocialUser" asp-controller="Home" asp-action="GetPostDetail" asp-route-postId="@item.Id">
+                                                @if (isImage)
+                                                {
+                                                    <img src="@replacedImageUrl" class="rounded-3 w-100" alt="image" style="object-fit: contain; max-height: 400px;">
+                                                }
+                                                else if (isVideo)
+                                                {
+                                                    <video controls class="rounded-3 w-100" style="object-fit: contain; max-height: 400px;">
+                                                        <source src="@replacedImageUrl" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                }
                                             </a>
                                         </div>
                                     </div>
@@ -190,15 +211,14 @@
                                 {
                                     <div class="row ps-2 pe-2">
                                         <div class="col-xs-12 col-sm-12 p-1">
-                                            <a href="" data-lightbox="">
-                                                <img src="https://bim.gov.vn/Upload/images/staffs/avatar-default.jpg" class="rounded-3 w-100" alt="image">
+                                            <a asp-area="SocialUser" asp-controller="Home" asp-action="GetPostDetail" asp-route-postId="@item.Id">
+                                                <img src="https://bim.gov.vn/Upload/images/staffs/avatar-default.jpg" class="rounded-3 w-100" style="object-fit: contain; max-height: 400px;" alt="image">
                                             </a>
                                         </div>
                                     </div>
                                 }
                             }
                         }
-
 
                     </div>
                 </div>
@@ -210,14 +230,14 @@
 
                         @if (item.Liked)
                         {
-                            <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                            <a href="#" onclick="react(event, '@item.Id')" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                                 <i class="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" data-item-id="@item.Id"></i>
                                 <span class="likeCount" data-item-id="@item.Id">@likeCount Like</span>
                             </a>
                         }
                         else
                         {
-                            <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                            <a href="#" onclick="react(event, '@item.Id')" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                                 <i class="feather-heart me-2 btn-round-xs font-xss" data-item-id="@item.Id"></i>
                                 <span class="likeCount" data-item-id="@item.Id">@likeCount Like</span>
                             </a>
@@ -272,7 +292,7 @@
                         }
                         else
                         {
-                            <figure class="avatar me-3"><img src="https://bim.gov.vn/Upload/images/staffs/avatar-default.jpg" alt="image" class="shadow-sm rounded-circle w45"></figure>
+                            <figure class="avatar me-3"><img src="https://bim.gov.vn/Upload/images/staffs/avatar-default.jpg"  alt="image" class="shadow-sm rounded-circle w45"></figure>
                         }
                         <h4 class="fw-700 text-grey-900 font-xssss mt-1"> @item.fname @item.lname</h4>
                     </a>
@@ -312,6 +332,14 @@
         function replaceImageUrl(imageUrl) {
             return imageUrl.replace("http://10.0.2.2:3000", "http://localhost:3000");
         }
+        function isImage(url) {
+            return url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png");
+        }
+
+        function isVideo(url) {
+            return url.endsWith(".mp4") || url.endsWith(".mov") || url.endsWith(".avi");
+        }
+
 
         function formatTimeAgo(postTime) {
             // Convert postTime to Date object
@@ -336,64 +364,73 @@
                 return "Just now";
             }
         }
-        $(document).ready(function () {
-            $(".feather-heart").click(function (e) {
-                e.preventDefault();
-                var btn = $(this);
-                var itemId = btn.data("item-id");
-                var likeCountElem = $(".likeCount[data-item-id='" + itemId + "']");
+        function react(event, itemId) {
+            event.preventDefault();
+            var btn = $(event.currentTarget);
+            var likeCountElem = $(".likeCount[data-item-id='" + itemId + "']");
+            console.log("item :" + itemId);
+            // Gửi yêu cầu Ajax
+            $.ajax({
+                type: "post", // Hoặc POST tùy thuộc vào cách bạn cấu hình server
+                url: "/SocialUser/home/UpdatePostLikes", // Thay đổi ControllerName thành tên controller của bạn
+                data: { postId: itemId },
+                dataType: "json",
+                success: function (response) {
+                    console.log(response.liked);
+                    if (response.liked == true) {
+                        console.log("tcvf");
+                        $(".feather-heart[data-item-id='" + itemId + "']").addClass("bg-red-gradiant");
+                        $(".feather-heart[data-item-id='" + itemId + "']").addClass("text-white");
 
-                // Gửi yêu cầu Ajax
-                $.ajax({
-                    type: "post", // Hoặc POST tùy thuộc vào cách bạn cấu hình server
-                    url: "/SocialUser/home/UpdatePostLikes", // Thay đổi ControllerName thành tên controller của bạn
-                    data: { postId: itemId },
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response.liked);
-                        if (response.liked == true) {
-                            console.log("tcvf");
-                            $(".feather-heart[data-item-id='" + itemId + "']").addClass("bg-red-gradiant");
-                            $(".feather-heart[data-item-id='" + itemId + "']").addClass("text-white");
-
-                        } else if (response.liked == false) {
-                            // Nếu liked là false, cập nhật trạng thái liked
-                            console.log("shjs");
-                            $(".feather-heart[data-item-id='" + itemId + "']").removeClass("bg-red-gradiant");
-                            $(".feather-heart[data-item-id='" + itemId + "']").removeClass("text-white");
-                        } else {
-                            alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
-                        }
-
-                        // Cập nhật số lượng like (nếu có) - Lưu ý: Nếu API không trả về số lượng like, bạn phải cập nhật số lượng like một cách riêng biệt (nếu cần thiết)
-                        var currentLikeCount = parseInt(likeCountElem.text());
-                        var newLikeCount = response.liked ? currentLikeCount + 1 : currentLikeCount - 1;
-                        likeCountElem.text(newLikeCount + " Like");
-                    },
-                    error: function () {
+                    } else if (response.liked == false) {
+                        // Nếu liked là false, cập nhật trạng thái liked
+                        console.log("shjs");
+                        $(".feather-heart[data-item-id='" + itemId + "']").removeClass("bg-red-gradiant");
+                        $(".feather-heart[data-item-id='" + itemId + "']").removeClass("text-white");
+                    } else {
                         alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
                     }
-                });
+
+                    // Cập nhật số lượng like (nếu có) - Lưu ý: Nếu API không trả về số lượng like, bạn phải cập nhật số lượng like một cách riêng biệt (nếu cần thiết)
+                    var currentLikeCount = parseInt(likeCountElem.text());
+                    var newLikeCount = response.liked ? currentLikeCount + 1 : currentLikeCount - 1;
+                    likeCountElem.text(newLikeCount + " Like");
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
+                }
             });
-        });
+        };
         $('.feather-image').click(function () {
             $('#fileInput').click();
         });
 
-        // Sự kiện khi chọn ảnh
+        // Sự kiện khi chọn tệp
         $('#fileInput').change(function () {
             var file = this.files[0];
 
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                var imageUrl = e.target.result;
-                $('#previewImage').attr('src', imageUrl);
+                var fileContent = e.target.result;
+
+                // Kiểm tra loại tệp (ảnh hoặc video) bằng cách kiểm tra định dạng
+                if (file.type.includes('image')) {
+                    $('#previewImage').attr('src', fileContent);
+                    $('#previewVideo').hide(); // Ẩn thẻ video nếu có
+                    $('#previewImage').show(); // Hiển thị thẻ ảnh
+                } else if (file.type.includes('video')) {
+                    $('#previewVideo source').attr('src', fileContent);
+                    $('#previewImage').hide(); // Ẩn thẻ ảnh nếu có
+                    $('#previewVideo').show(); // Hiển thị thẻ video
+                    $('#previewVideo')[0].load(); // Load lại video
+                }
             };
 
-            // Đọc và hiển thị ảnh
+            // Đọc nội dung tệp
             reader.readAsDataURL(file);
         });
+
 
 
 
@@ -409,8 +446,9 @@
                    var formData = new FormData();
         formData.append("post", postContent);
 
+                 console.log(JSON.stringify(formData));
         if (postImgFile) {
-            formData.append("image", postImgFile);
+            formData.append("media", postImgFile);
              }
              console.log("a :" + formData);
         $.ajax({
@@ -421,64 +459,75 @@
             processData: false,
             success: function (response) {
                 console.log(response.postId);
+                 var imageUrl = "@HttpContextAccessor.HttpContext.Session.GetString("Image")";
+                 var userName = "@HttpContextAccessor.HttpContext.Session.GetString("UserName")";
+
+        if (imageUrl) {
+            imageUrl = imageUrl.replace("http://10.0.2.2:3000", "http://localhost:3000");
+        } else {
+            imageUrl = "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png";
+        }
                 var newPost = `
-        <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3" id="${response.postId}">
-            <div class="card-body p-0 d-flex">
-                <!-- Thay đổi link asp-controller và asp-action theo yêu cầu -->
-                <a asp-area="SocialUser" asp-controller="Account" asp-action="Index" asp-route-userId="${response.post.userId}">
-                    <figure class="avatar me-3">
-                        <!-- Thay đổi ảnh user tương ứng -->
-                        <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png" alt="image" class="shadow-sm rounded-circle w45">
-                    </figure>
-                </a>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-1">
-                   La lisa
-                    <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">${formatTimeAgo(response.post.postTime)}</span>
-                </h4>
-              <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
-                            <div class="card-body p-0 d-flex mt-2">
-                                <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost("${response.postId}")"><a>Delete Post</a> <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                        <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3" id="${response.postId}">
+                            <div class="card-body p-0 d-flex">
+                                <!-- Thay đổi link asp-controller và asp-action theo yêu cầu -->
+                                <a asp-area="SocialUser" asp-controller="Account" asp-action="Index" asp-route-userId="${response.post.userId}">
+                                    <figure class="avatar me-3">
+                                        <!-- Thay đổi ảnh user tương ứng -->
+                                        <img src="${imageUrl}" alt="image" class="shadow-sm rounded-circle w45">
+                                    </figure>
+                                </a>
+                                <h4 class="fw-700 text-grey-900 font-xssss mt-1">
+                                   ${userName}
+                                    <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">${formatTimeAgo(response.post.postTime)}</span>
+                                </h4>
+                              <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+                                        <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
+                                            <div class="card-body p-0 d-flex mt-2">
+                                                <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
+                                                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4" onclick="deletePost("${response.postId}")"><a>Delete Post</a> <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                                            </div>
+                                        </div>
                             </div>
-                        </div>
-            </div>
-            <div>
-                <div class="card-body p-0 me-lg-5">
-                    <a asp-area="SocialUser" asp-controller="Home" asp-action="GetPostDetail" asp-route-postId="${response.post._id}">
-                        <p class="fw-500 text-grey-500 lh-26 font-xssss w-100">${response.post.post}</p>
-                    </a>
-                </div>
-                <div class="card-body d-block p-0">
-                     ${response.post.postImg.map(imageUrl => `
-                        <div class="row ps-2 pe-2">
-                            <div class="col-xs-12 col-sm-12 p-1">
-                                <a href="${replaceImageUrl(imageUrl)}" data-lightbox="">
-                                    <img src="${replaceImageUrl(imageUrl)}" class="rounded-3 w-100" alt="image">
+                            <div>
+                                <div class="card-body p-0 me-lg-5">
+                                    <a asp-area="SocialUser" asp-controller="Home" asp-action="GetPostDetail" asp-route-postId="${response.post._id}">
+                                       <p class="fw-500 text-grey-500 lh-26 font-xssss w-100">${response.post.post ? response.post.post : ''}</p>
+                                    </a>
+                                </div>
+                               <div class="card-body d-block p-0">
+                            ${response.post.postImg.map(imageUrl => `
+                                <div class="row ps-2 pe-2">
+                                    <div class="col-xs-12 col-sm-12 p-1">
+                                        <a asp-area="SocialUser" asp-controller="Home" asp-action="GetPostDetail" asp-route-postId="${response.post._id}">
+                                            ${isImage(imageUrl) ? `<img src="${replaceImageUrl(imageUrl)}" class="rounded-3 w-100" alt="image" style="object-fit: contain; max-height: 400px;">` : ''}
+                                            ${isVideo(imageUrl) ? `<video controls style="object-fit: contain; max-height: 400px;" class="rounded-3 w-100"><source src="${replaceImageUrl(imageUrl)}" type="video/mp4">Your browser does not support the video tag.</video>` : ''}
+                                        </a>
+                                    </div>
+                                </div>
+                            `).join('')}</div>
+
+                            </div>
+
+                            <div class="card-body d-flex p-0 mt-3 justify-content-between">
+                                <!-- Thêm số lượng like và comment -->
+                                <a href="#" onclick="react(event, '${response.post._id}')"  class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                                    <i class="feather-heart me-2 btn-round-xs font-xss"></i>
+                                    <span class="likeCount" data-item-id="${response.post._id}">0 Like</span>
+                                </a>
+                                <a href="#" class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
+                                    <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
+                                    <span>0 Comment</span>
                                 </a>
                             </div>
                         </div>
-                    `).join('')}
-                </div>
-            </div>
-
-            <div class="card-body d-flex p-0 mt-3 justify-content-between">
-                <!-- Thêm số lượng like và comment -->
-                <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
-                    <i class="feather-heart me-2 btn-round-xs font-xss"></i>
-                    <span class="likeCount" data-item-id="${response.post._id}">0 Like</span>
-                </a>
-                <a href="#" class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
-                    <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-                    <span>0 Comment</span>
-                </a>
-            </div>
-        </div>
-    `;
+                    `;
                 console.log(newPost);
                 $("#postContent").prepend(newPost);
                 $('textarea[name="content"]').val(""); // Clear post content
                 $('#fileInput').val(""); // Clear input file
+                $('#previewImage').hide();
+                $('#previewVideo').hide();
             },
             error: function () {
                 // Xử lý khi có lỗi trong quá trình đăng bài
