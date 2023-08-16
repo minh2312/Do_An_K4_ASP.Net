@@ -220,7 +220,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                         var uploadResult = await uploadResponse.Content.ReadAsStringAsync();
                         var filename = JsonConvert.DeserializeObject<dynamic>(uploadResult).filename;
 
-                         imageUrl = $"http://localhost:3000/public/uploads/{filename}";
+                         imageUrl = $"http://10.0.2.2:3000/public/uploads/{filename}";
                     }
 
                     // Gửi thông tin bài viết lên API để tạo bài viết
