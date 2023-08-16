@@ -34,7 +34,7 @@ namespace DoAN_k4.Controllers
         {
             int pageSize = 5; 
 
-            List<User> userList = await _dbContext.users.Find(_ => true).ToListAsync();
+            List<User> userList = await _dbContext.users.Find(user => !user.IsAdmin).ToListAsync();
 
             IPagedList<User> pagedListUsers = userList.ToPagedList(page ?? 1, pageSize);
 

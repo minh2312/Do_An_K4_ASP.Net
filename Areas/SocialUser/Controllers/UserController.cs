@@ -32,7 +32,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
 
         public async Task<IActionResult> Login(string email, string password)
         {
-            var acc = await _dbContext.users.Find(u => u.Email == email).FirstOrDefaultAsync();
+            var acc = await _dbContext.users.Find(u => u.Email == email && u.Status).FirstOrDefaultAsync();
             if (acc != null)
             {
                 bool checkPass = BCrypt.Net.BCrypt.Verify(password, acc.Password);
@@ -40,6 +40,7 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                 {
                     HttpContext.Session.SetString("UserLogin", acc.Id);
                     HttpContext.Session.SetString("Email", acc.Email);
+                    HttpContext.Session.SetString("UserName", acc.FirstName + " "+acc.LastName);
                     HttpContext.Session.SetString("Image", acc.UserImage);
                     return RedirectToAction("Index", "Home");
                 }

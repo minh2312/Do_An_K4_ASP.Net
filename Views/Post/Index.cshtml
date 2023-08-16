@@ -7,29 +7,28 @@
 
 <div class="row">
     <div class="col-md-6" style="padding: 20px;">
-        <span style="font-size:18px;font-weight:800">Danh Sách Bài Viết</span>
+        <span style="font-size:18px;font-weight:800">List Post</span>
     </div>
     
     <div class="col-md-12">
         <div class="col-md-4">
             <form method="get">
                 <div class="form-group" style="display:flex">
-                    <input type="text" name="searchString" class="form-control" placeholder="Search users...">
+                    <input type="text" name="searchString" class="form-control" placeholder="Search post...">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
 
             </form>
         </div>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover table-responsive ">
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th>#</th>
                     <th>Post</th>
                     <th>Total Like</th>
                     <th>Totla Comment</th>
                     <th>Status</th>
                     <th>CreateAt</th>
-                    <th>UpdateAt</th>
                     <th>Option</th>
                 </tr>
             </thead>
@@ -39,20 +38,25 @@
                     var post = Model[i];
                     <tr>
                         <td>@(i + 1)</td>
-                        <td>@post.Post</td>
+                        <td width="180px" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis; " title="@post.Post">
+                            @if (post.Post != null)
+                            {
+                                @(post.Post.Length>70 ? post.Post.Substring(0, 70) + "..." : post.Post)
+
+                            }
+                        </td>
                         <td>@post.Likes.Length <i class="fa-regular fa-thumbs-up"></i></td> <!-- Display total likes -->
                         <td>@post.Comments.Length <i class="fa-regular fa-comments"></i></td>
                         @if (post.Status)
                         {
-                            <td><label class="badge badge-success">Hoạt Động</label></td>
+                            <td><label class="badge badge-success">Active</label></td>
                         }
                         else
                         {
-                            <td><label class="badge badge-danger">Dừng Hoạt Động</label></td>
+                            <td><label class="badge badge-danger">Inactivity</label></td>
                         }
 
                         <td>@post.CreatedAt</td>
-                        <td>@post.UpdatedAt</td>
                         <td>
                             <a style="color:black" href="@Url.Action("Detail", "Post", new { idPost = post.Id })"> <i class="fa-solid fa-circle-info"></i></a> |
                             @if (post.Status)
@@ -86,12 +90,12 @@
             $(".BanPost").click(function () {
                 var postId = $(this).data('idpost');
                 Swal.fire({
-                    title: 'Bạn Có Chắc Chắn Muốn Ban Bài Viết Này ?',
+                    title: 'Are you sure you want to block this post?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes !'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
@@ -106,7 +110,7 @@
                                 Swal.fire({
                                     position: 'top-end',
                                     icon: 'success',
-                                    title: 'Ban Bài Viết Thành Công',
+                                    title: 'Post blocked successfully !',
                                     showConfirmButton: false,
                                     timer: 2000
                                 })
@@ -127,12 +131,12 @@
                 var idPost = $(this).data('idpostunlock');
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Bạn Có Chắc Chắn Muốn Mở Khóa Bài Viết Này ?",
+                    text: "Are you sure you want to unlock this post ?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, unlock it!'
+                    confirmButtonText: 'Yes!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // User clicked "Yes," perform the AJAX request
@@ -148,7 +152,7 @@
                                 Swal.fire({
                                     position: 'top-end',
                                     icon: 'success',
-                                    title: 'Mở Khóa Bài Viết Thành Công',
+                                    title: 'This post has been unblocked !',
                                     showConfirmButton: false,
                                     timer: 2000
                                 })
