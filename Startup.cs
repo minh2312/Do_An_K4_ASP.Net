@@ -77,14 +77,8 @@ namespace DoAN_k4
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
 
-            app.UseMvc(routes =>
+             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                   name: "areas",
@@ -92,6 +86,14 @@ namespace DoAN_k4
                 );
             });
 
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+           
         }
     }
 }
