@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -134,18 +135,31 @@ namespace DoAN_k4.Areas.SocialUser.Controllers
                     if (avatar != null)
                     {
                         // Gửi ảnh lên API để upload
-                        var formData = new MultipartFormDataContent();
-                        formData.Add(new StreamContent(avatar.OpenReadStream()), "media", avatar.FileName);
+                        bool isImage = avatar.ContentType.StartsWith("image/");
+                        bool isVideo = avatar.ContentType.StartsWith("video/");
 
-                        var uploadResponse = await httpClient.PostAsync(urlConnectApi + "upload", formData);
+                        if (!isImage && !isVideo)
+                        {
+                            return BadRequest("Invalid file type. Only image and video files are allowed.");
+                        }
+
+                        // Gửi ảnh/lưu trữ video lên API/Server để upload
+                        var formData = new MultipartFormDataContent();
+                        var streamContent = new StreamContent(avatar.OpenReadStream());
+                        streamContent.Headers.ContentType = new MediaTypeHeaderValue(avatar.ContentType);
+                        formData.Add(streamContent, "media", avatar.FileName);
+
+                        var uploadResponse = await httpClient.PostAsync("http://localhost:3000/upload", formData);
+
                         if (!uploadResponse.IsSuccessStatusCode)
                         {
-                            return BadRequest("Failed to upload image.");
+                            return BadRequest("Failed to upload media.");
                         }
 
                         var uploadResult = await uploadResponse.Content.ReadAsStringAsync();
                         var filename = JsonConvert.DeserializeObject<dynamic>(uploadResult).filename;
-                        imageUrl = "http://10.0.2.2:3000/public/uploads/" + filename;
+
+                        imageUrl = $"http://10.0.2.2:3000/public/uploads/{filename}";
 
                     }
                     else
