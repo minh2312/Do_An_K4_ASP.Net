@@ -8,7 +8,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Skydash Admin</title>
+  <title> Admin</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="~/asstes/vendors/feather/feather.css">
     <link rel="stylesheet" href="~/asstes/vendors/ti-icons/css/themify-icons.css">
@@ -111,32 +111,32 @@
 
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">
                             <i class="icon-grid menu-icon"></i>
-                            <span class="menu-title">Dashboard</span>
+                            <span class="menu-title">Home</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-layout menu-icon"></i>
-                            <span class="menu-title">Quản Lý Tài Khoản</span>
+                            <span class="menu-title">Account Management</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="~/User/Index">Danh Sách Người Dùng</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="~/User/Index">List user</a></li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
                             <i class="icon-columns menu-icon"></i>
-                            <span class="menu-title">Quản Lý Bài Viết</span>
+                            <span class="menu-title">Post Management</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse" id="form-elements">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link" href="~/Post/Index">Danh Sách Bài Viết</a></li>
+                                <li class="nav-item"><a class="nav-link" href="~/Post/Index">List Post</a></li>
                             </ul>
                         </div>
                     </li>
