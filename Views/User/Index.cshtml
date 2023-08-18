@@ -16,6 +16,7 @@
                             <th>Image</th>
                             <th>Full Name</th>
                             <th>Email</th>
+                            <th>ToTal Follow</th>
                             <th>Status</th>
                             <th>CreateAt</th>
                             <th>UpdateAt</th>
@@ -41,6 +42,14 @@
                                 </td>
                                 <td>@($"{user.FirstName} {user.LastName}")</td>
                                 <td>@user.Email</td>
+                                @if (user.Followers != null)
+                                {
+                                    <td> @user.Followers.Length</td>
+                                }
+                                else
+                                {
+                                    <td>0</td>
+                                }
                                 @if (user.Status)
                                 {
                                     <td><label class="badge badge-success">Active</label></td>
